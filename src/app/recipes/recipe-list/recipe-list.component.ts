@@ -7,5 +7,11 @@ import { Recipe } from '../recipe.model';
   styleUrl: './recipe-list.component.css',
 })
 export class RecipeListComponent {
-  recipes: Recipe[] = [];
+  recipes: Recipe[] = [
+    new Recipe(
+      'A Test Recipe',
+      'This is simply a test',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwEYYBbD33ig9Pbcel7iOhKc_wUt6k2wiFrg&usqp=CAU'
+    ),
+  ];
 }
