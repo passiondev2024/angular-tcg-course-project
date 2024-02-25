@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-tcg-the-basics": {
+    "angular-tcg-course-project": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular-tcg-the-basics",
+            "outputPath": "dist/angular-tcg-course-project",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-tcg-the-basics:build:production"
+              "buildTarget": "angular-tcg-course-project:build:production"
             },
             "development": {
-              "buildTarget": "angular-tcg-the-basics:build:development"
+              "buildTarget": "angular-tcg-course-project:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "angular-tcg-the-basics:build"
+            "buildTarget": "angular-tcg-course-project:build"
           }
         },
         "test": {
