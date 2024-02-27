@@ -1,4 +1,5 @@
 // import { Injectable } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { Recipe } from './recipe.model';
 
 // Even though we can remove this service from the providers array in the recipe.component
@@ -6,6 +7,8 @@ import { Recipe } from './recipe.model';
 // following the guide properly.
 // @Injectable({ providedIn: 'root' })
 export class RecipeService {
+  recipeSelected = new EventEmitter<Recipe>();
+
   private recipes: Recipe[] = [
     new Recipe(
       'A Test Recipe',
