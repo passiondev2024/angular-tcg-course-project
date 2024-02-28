@@ -16,9 +16,17 @@ export class ShoppingListService {
 
   getIngredients = () => this.ingredients.slice();
 
-  addIngredients(ingredient: Ingredient) {
-    console.log(`🔎 | shopping-list-service | addIngredients`);
+  addIngredient(ingredient: Ingredient) {
+    console.log(`🔎 | shopping-list-service | addIngredient`);
+
     this.ingredients.push(ingredient);
+    this.ingredientAdded.emit(this.ingredients.slice());
+  }
+
+  addIngredients(ingredients: Ingredient[]) {
+    console.log(`🔎 | shopping-list-service | addIngredients`);
+
+    this.ingredients.push(...ingredients);
     this.ingredientAdded.emit(this.ingredients.slice());
   }
 }

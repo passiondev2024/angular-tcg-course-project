@@ -20,6 +20,6 @@ export class ShoppingEditComponent {
       this.amount.nativeElement.value
     );
 
-    this.shoppinglistService.addIngredients(newIngredient);
+    this.shoppinglistService.addIngredient(newIngredient);
   }
 }

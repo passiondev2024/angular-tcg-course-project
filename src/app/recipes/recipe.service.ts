@@ -1,12 +1,14 @@
-// import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 
 // Even though we can remove this service from the providers array in the recipe.component
 // and instead use the @Injectable way, we will ignore this in favor of
 // following the guide properly.
 // @Injectable({ providedIn: 'root' })
+@Injectable()
 export class RecipeService {
   recipeSelected = new EventEmitter<Recipe>();
 
@@ -25,5 +27,11 @@ export class RecipeService {
     ),
   ];
 
+  constructor(private slService: ShoppingListService) {}
+
   getRecipes = () => this.recipes.slice();
+
+  addIngredientsToShoppingList(ingredients: Ingredient[]) {
+    this.slService.addIngredients(ingredients);
+  }
 }
