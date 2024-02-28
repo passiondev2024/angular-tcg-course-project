@@ -7,7 +7,7 @@ import { Ingredient } from '../shared/ingredient.model';
 // following the guide properly.
 // @Injectable({ providedIn: 'root' })
 export class ShoppingListService {
-  ingredientAdded = new EventEmitter<Ingredient>();
+  ingredientAdded = new EventEmitter<Ingredient[]>();
 
   private ingredients: Ingredient[] = [
     new Ingredient('Apples', 5),
@@ -19,5 +19,6 @@ export class ShoppingListService {
   addIngredients(ingredient: Ingredient) {
     console.log(`🔎 | shopping-list-service | addIngredients`);
     this.ingredients.push(ingredient);
+    this.ingredientAdded.emit(this.ingredients.slice());
   }
 }
