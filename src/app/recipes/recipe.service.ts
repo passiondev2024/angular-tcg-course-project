@@ -1,6 +1,7 @@
 // import { Injectable } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { Recipe } from './recipe.model';
+import { Ingredient } from '../shared/ingredient.model';
 
 // Even though we can remove this service from the providers array in the recipe.component
 // and instead use the @Injectable way, we will ignore this in favor of
@@ -11,19 +12,18 @@ export class RecipeService {
 
   private recipes: Recipe[] = [
     new Recipe(
-      'A Test Recipe',
-      'This is simply a test',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwEYYBbD33ig9Pbcel7iOhKc_wUt6k2wiFrg&usqp=CAU'
+      'Tasty Schnitzel',
+      'A super-tasty Schnitzel - just awesome',
+      'https://www.allrecipes.com/thmb/bu4s12dq2GNt-kgi9R8sZTrhQYo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pork-Schnitzel-ddmfs-3x2-113-7c044e725d604cb0b2a3827b63a7f6f6.jpg',
+      [new Ingredient('Meat', 1), new Ingredient('Fries', 20)]
     ),
     new Recipe(
-      'A second Test Recipe',
-      'This is secondly a test',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwEYYBbD33ig9Pbcel7iOhKc_wUt6k2wiFrg&usqp=CAU'
+      'Big Fat Burger',
+      'What else is there to say?',
+      'https://www.allrecipes.com/thmb/5JVfA7MxfTUPfRerQMdF-nGKsLY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/25473-the-perfect-basic-burger-DDMFS-4x3-56eaba3833fd4a26a82755bcd0be0c54.jpg',
+      [new Ingredient('Meat', 1), new Ingredient('buns', 2)]
     ),
   ];
 
-  // getRecipes() {
-  //   return this.recipes.slice();
-  // }
   getRecipes = () => this.recipes.slice();
 }
