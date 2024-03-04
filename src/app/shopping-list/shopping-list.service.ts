@@ -1,5 +1,5 @@
 // import { Injectable } from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Ingredient } from '../shared/ingredient.model';
 
 // Even though we can remove this service from the providers array in the recipe.component
@@ -7,7 +7,7 @@ import { Ingredient } from '../shared/ingredient.model';
 // following the guide properly.
 // @Injectable({ providedIn: 'root' })
 export class ShoppingListService {
-  ingredientAdded = new EventEmitter<Ingredient[]>();
+  ingredientAdded = new Subject<Ingredient[]>();
 
   private ingredients: Ingredient[] = [
     new Ingredient('Apples', 5),
@@ -20,13 +20,13 @@ export class ShoppingListService {
     console.log(`🔎 | shopping-list-service | addIngredient`);
 
     this.ingredients.push(ingredient);
-    this.ingredientAdded.emit(this.ingredients.slice());
+    this.ingredientAdded.next(this.ingredients.slice());
   }
 
   addIngredients(ingredients: Ingredient[]) {
     console.log(`🔎 | shopping-list-service | addIngredients`);
 
     this.ingredients.push(...ingredients);
-    this.ingredientAdded.emit(this.ingredients.slice());
+    this.ingredientAdded.next(this.ingredients.slice());
   }
 }
