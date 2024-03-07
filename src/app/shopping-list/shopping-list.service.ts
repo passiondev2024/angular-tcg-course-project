@@ -8,6 +8,7 @@ import { Ingredient } from '../shared/ingredient.model';
 // @Injectable({ providedIn: 'root' })
 export class ShoppingListService {
   ingredientAdded = new Subject<Ingredient[]>();
+  startingEditing = new Subject<number>();
 
   private ingredients: Ingredient[] = [
     new Ingredient('Apples', 5),
