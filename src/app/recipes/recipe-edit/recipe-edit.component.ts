@@ -1,6 +1,6 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RecipeService } from '../recipe.service';
 import { Recipe } from '../recipe.model';
 
@@ -9,14 +9,15 @@ import { Recipe } from '../recipe.model';
   templateUrl: './recipe-edit.component.html',
   styleUrl: './recipe-edit.component.css',
 })
-export class RecipeEditComponent implements OnInit, OnChanges {
+export class RecipeEditComponent implements OnInit {
   id: number;
   editMode = false;
   recipeForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -25,10 +26,6 @@ export class RecipeEditComponent implements OnInit, OnChanges {
       this.editMode = params['id'] != null;
       this.initForm();
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(`🔎 | ngOnChanges | changes:`, changes);
   }
 
   onSubmit() {
@@ -49,6 +46,7 @@ export class RecipeEditComponent implements OnInit, OnChanges {
     } else {
       this.recipeService.addRecipe(this.recipeForm.value);
     }
+    this.onCancel();
   }
 
   private initForm() {
@@ -100,5 +98,9 @@ export class RecipeEditComponent implements OnInit, OnChanges {
         ]),
       })
     );
+  }
+
+  onCancel() {
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }
