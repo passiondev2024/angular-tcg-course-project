@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
+import { Subject } from 'rxjs';
 
 // Even though we can remove this service from the providers array in the recipe.component
 // and instead use the @Injectable way, we will ignore this in favor of
@@ -9,6 +10,8 @@ import { ShoppingListService } from '../shopping-list/shopping-list.service';
 // @Injectable({ providedIn: 'root' })
 @Injectable()
 export class RecipeService {
+  recipesChanged = new Subject<Recipe[]>();
+
   private recipes: Recipe[] = [
     new Recipe(
       'Tasty Schnitzel',
@@ -32,5 +35,17 @@ export class RecipeService {
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
     this.slService.addIngredients(ingredients);
+  }
+
+  addRecipe(recipe: Recipe) {
+    console.log(`🔎 | RecipeService | addRecipe:`, recipe);
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  UpdateRecipe(index: number, newRecipe: Recipe) {
+    console.log(`🔎 | RecipeService | UpdateRecipe:`, newRecipe);
+    this.recipes[index] = newRecipe;
+    this.recipesChanged.next(this.recipes.slice());
   }
 }

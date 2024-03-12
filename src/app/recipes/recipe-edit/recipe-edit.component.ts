@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { RecipeService } from '../recipe.service';
+import { Recipe } from '../recipe.model';
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrl: './recipe-edit.component.css',
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnChanges {
   id: number;
   editMode = false;
   recipeForm: FormGroup;
@@ -26,11 +27,28 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(`🔎 | ngOnChanges | changes:`, changes);
+  }
+
   onSubmit() {
     console.log(
-      `🔎 | RecipeEditComponent | onSubmit > recipeForm:`,
-      this.recipeForm
+      `🔎 | RecipeEditComponent | onSubmit > recipeForm.value:`,
+      this.recipeForm.value
     );
+    // const newRecipe = new Recipe(
+    //   this.recipeForm.value['name'],
+    //   this.recipeForm.value['description'],
+    //   this.recipeForm.value['imagePath'],
+    //   this.recipeForm.get('ingredients').value
+    // );
+    // console.log(`🔎 | RecipeEditComponent | onSubmit > newRecipe:`, newRecipe);
+
+    if (this.editMode) {
+      this.recipeService.UpdateRecipe(this.id, this.recipeForm.value);
+    } else {
+      this.recipeService.addRecipe(this.recipeForm.value);
+    }
   }
 
   private initForm() {
@@ -68,12 +86,12 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
-  get controls() {
-    return (<FormArray>this.recipeForm.get('ingredients')).controls;
+  get recipeControls() {
+    return (this.recipeForm.get('ingredients') as FormArray).controls;
   }
 
   onAddIngredient() {
-    (<FormArray>this.recipeForm.get('ingredients')).push(
+    (this.recipeForm.get('ingredients') as FormArray).push(
       new FormControl({
         name: new FormControl(null, Validators.required),
         amount: new FormControl(null, [
