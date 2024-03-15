@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Recipe } from '../recipes/recipe.model';
 import { RecipeService } from '../recipes/recipe.service';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
@@ -16,6 +16,7 @@ export class DataStorageService {
     const recipes = this.recipeService.getRecipes();
     this.http
       .put(`${this.BASE_URL}/recipes.json`, recipes)
+
       .subscribe((response) => {
         console.log(
           `🔎 | DataStorageService | storeRecipes > response:`,
@@ -27,24 +28,22 @@ export class DataStorageService {
   fetchRecipes() {
     console.log(`🔎 | DataStorageService | fetchRecipes`);
 
-    this.http
-      .get<Recipe[]>(`${this.BASE_URL}/recipes.json`)
-      .pipe(
-        map((recipes) => {
-          return recipes.map((recipe) => {
-            return {
-              ...recipe,
-              ingredients: recipe.ingredients ? recipe.ingredients : [],
-            };
-          });
-        })
-      )
-      .subscribe((recipes) => {
+    return this.http.get<Recipe[]>(`${this.BASE_URL}/recipes.json`).pipe(
+      map((recipes) => {
+        return recipes.map((recipe) => {
+          return {
+            ...recipe,
+            ingredients: recipe.ingredients ? recipe.ingredients : [],
+          };
+        });
+      }),
+      tap((recipes) => {
         console.log(
-          `🔎 | DataStorageService | fetchRecipes > recipes:`,
+          `🔎 | DataStorageService | fetchRecipes > tap recipes:`,
           recipes
         );
         this.recipeService.setRecipes(recipes);
-      });
+      })
+    );
   }
 }
