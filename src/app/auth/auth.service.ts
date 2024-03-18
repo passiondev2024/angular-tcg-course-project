@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { sercretService } from '../shared/sercrets.service';
 
 interface AuthResponseData {
@@ -24,6 +26,25 @@ export class AuthService {
       returnSecureToken: true,
     };
 
-    return this.http.post<AuthResponseData>(this.Auth_URL, body);
+    return this.http.post<AuthResponseData>(this.Auth_URL, body).pipe(
+      catchError((errorRes) => {
+        let errorMsg = 'An unknown error occurred!';
+
+        if (!errorRes.error || !errorRes.error.error) {
+          return throwError(errorMsg);
+        }
+
+        switch (errorRes.error.error.message) {
+          case 'EMAIL_EXISTS':
+            errorMsg = 'The email already exists!';
+            break;
+
+          default:
+            break;
+        }
+
+        return throwError(errorMsg);
+      })
+    );
   }
 }

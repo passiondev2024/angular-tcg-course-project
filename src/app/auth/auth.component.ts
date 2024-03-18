@@ -33,9 +33,9 @@ export class AuthComponent {
           console.log(`🔎 | AuthComponent | onSubmit > resData:`, resData);
           this.isLoading = false;
         },
-        (error) => {
-          console.log(`🔎 | AuthComponent | onSubmit > error:`, error);
-          this.error = 'An error occurred!';
+        (errorMsg) => {
+          console.log(`🔎 | AuthComponent | onSubmit > error:`, errorMsg);
+          this.error = errorMsg;
           this.isLoading = false;
         }
       );
