@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -32,26 +32,7 @@ export class AuthService {
         `${this.Auth_URL}:signUp?key=${this.API_KEY}`,
         body
       )
-      .pipe(
-        catchError((errorRes) => {
-          let errorMsg = 'An unknown error occurred!';
-
-          if (!errorRes.error || !errorRes.error.error) {
-            return throwError(errorMsg);
-          }
-
-          switch (errorRes.error.error.message) {
-            case 'EMAIL_EXISTS':
-              errorMsg = 'The email already exists!';
-              break;
-
-            default:
-              break;
-          }
-
-          return throwError(errorMsg);
-        })
-      );
+      .pipe(catchError(this.handleError));
   }
 
   login(email: string, password: string) {
@@ -61,9 +42,40 @@ export class AuthService {
       returnSecureToken: true,
     };
 
-    return this.http.post<AuthResponseData>(
-      `${this.Auth_URL}:signInWithPassword?key=${this.API_KEY}`,
-      body
-    );
+    return this.http
+      .post<AuthResponseData>(
+        `${this.Auth_URL}:signInWithPassword?key=${this.API_KEY}`,
+        body
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(errorRes: HttpErrorResponse) {
+    console.error(`🔎 | AuthService | handleError > errorRes:`, errorRes);
+    let errorMsg = 'An unknown error occurred!';
+
+    if (!errorRes.error || !errorRes.error.error) {
+      return throwError(errorMsg);
+    }
+
+    switch (errorRes.error.error.message) {
+      case 'EMAIL_EXISTS':
+        errorMsg = 'The email already exists.';
+        break;
+      case 'EMAIL_NOT_FOUND': // Deprecated?
+        errorMsg = 'The email does not exist.';
+        break;
+      case 'INVALID_PASSWORD': // Deprecated?
+        errorMsg = 'The password is not correct.';
+        break;
+      case 'INVALID_LOGIN_CREDENTIALS':
+        errorMsg = 'The login credentials are invalid.';
+        break;
+
+      default:
+        break;
+    }
+
+    return throwError(errorMsg);
   }
 }
