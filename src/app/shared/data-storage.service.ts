@@ -33,13 +33,7 @@ export class DataStorageService {
   fetchRecipes() {
     console.log(`🔎 | DataStorageService | fetchRecipes`);
 
-    return this.authService.user.pipe(
-      take(1),
-      exhaustMap((user) => {
-        return this.http.get<Recipe[]>(`${this.BASE_URL}/recipes.json`, {
-          params: new HttpParams().set('auth', user.token),
-        });
-      }),
+    return this.http.get<Recipe[]>(`${this.BASE_URL}/recipes.json`).pipe(
       map((recipes) => {
         return recipes.map((recipe) => {
           return {
