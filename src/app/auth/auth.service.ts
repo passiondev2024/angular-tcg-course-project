@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { sercretService } from '../shared/sercrets.service';
@@ -16,7 +17,11 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private http: HttpClient, private SS: sercretService) {}
+  constructor(
+    private http: HttpClient,
+    private SS: sercretService,
+    private router: Router
+  ) {}
 
   API_KEY = this.SS.API_KEY;
   Auth_URL = `https://identitytoolkit.googleapis.com/v1/accounts`;
@@ -70,6 +75,11 @@ export class AuthService {
           );
         })
       );
+  }
+
+  logout() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
   }
 
   private handleAuthentication(
