@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject, throwError } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { sercretService } from '../shared/sercrets.service';
 import { User } from './user.model';
@@ -20,7 +20,7 @@ export class AuthService {
 
   API_KEY = this.SS.API_KEY;
   Auth_URL = `https://identitytoolkit.googleapis.com/v1/accounts`;
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
 
   signup(email: string, password: string) {
     const body = {
