@@ -16,10 +16,10 @@
       (window:resize)="collapsed = true"
     >
       <ul class="nav navbar-nav">
-        <li routerLinkActive="active">
+        <li routerLinkActive="active" *ngIf="isAuthenticated">
           <a routerLink="/recipes">Recipes</a>
         </li>
-        <li routerLinkActive="active">
+        <li routerLinkActive="active" *ngIf="!isAuthenticated">
           <a routerLink="/auth">Authenticate</a>
         </li>
         <li routerLinkActive="active">
@@ -27,7 +27,10 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li appDroprown class="dropdown">
+        <li *ngIf="isAuthenticated">
+          <a style="cursor: pointer">Logout</a>
+        </li>
+        <li appDroprown class="dropdown" *ngIf="isAuthenticated">
           <a class="dropdown-toggle" style="cursor: pointer" role="button">
             Manage <span class="caret"></span>
           </a>
