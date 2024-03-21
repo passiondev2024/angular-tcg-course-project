@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ComponentFactoryResolver } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AlertComponent } from '../shared/alert/alert.component';
 import { AuthResponseData, AuthService } from './auth.service';
 
 @Component({
@@ -11,9 +12,13 @@ import { AuthResponseData, AuthService } from './auth.service';
 export class AuthComponent {
   isLoginMode = true;
   isLoading = false;
-  error: string = null;
+  // error: string = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private componentFactoryResolve: ComponentFactoryResolver
+  ) {}
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -38,13 +43,14 @@ export class AuthComponent {
     authObs.subscribe(
       (resData) => {
         console.log(`🔎 | AuthComponent | onSubmit > resData:`, resData);
-        this.error = null;
+        // this.error = null;
         this.isLoading = false;
         this.router.navigate(['/recipes']);
       },
       (errorMsg) => {
         console.log(`🔎 | AuthComponent | onSubmit > error:`, errorMsg);
-        this.error = errorMsg;
+        // this.error = errorMsg;
+        this.showErrorAlert(errorMsg);
         this.isLoading = false;
       }
     );
@@ -52,7 +58,12 @@ export class AuthComponent {
     form.reset();
   }
 
-  onHandleClose() {
-    this.error = null;
+  // onHandleClose() {
+  //   this.error = null;
+  // }
+
+  private showErrorAlert(message: string) {
+    const alertCmpFactory =
+      this.componentFactoryResolve.resolveComponentFactory(AlertComponent);
   }
 }
